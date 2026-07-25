@@ -1,0 +1,156 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" width="100%" height="100%" style="background-color: #0D0F1A; font-family: system-ui, -apple-system, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#0F172A" stop-opacity="0.9" />
+    </linearGradient>
+    <linearGradient id="gateGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#EC4899" />
+    </linearGradient>
+    <linearGradient id="dbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+
+    <!-- Drop Shadow Filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+    
+    <!-- Arrow Marker -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#94A3B8"/>
+    </marker>
+    <marker id="arrowPrimary" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38BDF8"/>
+    </marker>
+  </defs>
+
+  <!-- Title Banner -->
+  <text x="450" y="38" text-anchor="middle" fill="#F8FAFC" font-size="20" font-weight="700" letter-spacing="0.5">PLACEMENTTRACKER — SYSTEM ARCHITECTURE</text>
+  <text x="450" y="58" text-anchor="middle" fill="#94A3B8" font-size="12">End-to-End Request Flow & Serverless Integration Diagram</text>
+
+  <!-- 1. CLIENT TIER -->
+  <rect x="40" y="90" width="220" height="420" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="40" y="90" width="220" height="40" rx="16" fill="#1E293B"/>
+  <rect x="40" y="115" width="220" height="15" fill="#1E293B"/>
+  <text x="150" y="116" text-anchor="middle" fill="#38BDF8" font-size="14" font-weight="700">1. CLIENT TIER</text>
+  <text x="150" y="132" text-anchor="middle" fill="#64748B" font-size="10">Web Browser / Mobile PWA</text>
+
+  <!-- Client Sub-components -->
+  <rect x="55" y="150" width="190" height="55" rx="8" fill="#0F172A" stroke="#7C3AED" stroke-width="1"/>
+  <text x="150" y="172" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Next.js 14 App Router</text>
+  <text x="150" y="190" text-anchor="middle" fill="#94A3B8" font-size="10">React 18 Client Components</text>
+
+  <rect x="55" y="215" width="190" height="55" rx="8" fill="#0F172A" stroke="#38BDF8" stroke-width="1"/>
+  <text x="150" y="237" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">UI &amp; Animation Engine</text>
+  <text x="150" y="255" text-anchor="middle" fill="#94A3B8" font-size="10">Tailwind CSS + Framer Motion</text>
+
+  <rect x="55" y="280" width="190" height="55" rx="8" fill="#0F172A" stroke="#EC4899" stroke-width="1"/>
+  <text x="150" y="302" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Interactive 3D Canvas</text>
+  <text x="150" y="320" text-anchor="middle" fill="#94A3B8" font-size="10">Three.js &amp; React Three Fiber</text>
+
+  <rect x="55" y="345" width="190" height="55" rx="8" fill="#0F172A" stroke="#10B981" stroke-width="1"/>
+  <text x="150" y="367" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Client State &amp; SWR</text>
+  <text x="150" y="385" text-anchor="middle" fill="#94A3B8" font-size="10">Optimistic UI &amp; Auto-Fetch</text>
+
+  <rect x="55" y="410" width="190" height="80" rx="8" fill="#0F172A" stroke="#F59E0B" stroke-width="1"/>
+  <text x="150" y="432" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Floating Widgets</text>
+  <text x="150" y="450" text-anchor="middle" fill="#94A3B8" font-size="10">• AI Study Buddy Chatbot</text>
+  <text x="150" y="468" text-anchor="middle" fill="#94A3B8" font-size="10">• Terms Gate &amp; Notifications</text>
+
+
+  <!-- AUTHENTICATION GATE (MIDDLEWARE) -->
+  <rect x="295" y="235" width="110" height="130" rx="12" fill="#1E1B4B" stroke="url(#gateGrad)" stroke-width="2" filter="url(#shadow)"/>
+  <text x="350" y="260" text-anchor="middle" fill="#F59E0B" font-size="11" font-weight="700">SECURITY GATE</text>
+  <text x="350" y="280" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">NextAuth.js</text>
+  <text x="350" y="298" text-anchor="middle" fill="#CBD5E1" font-size="10">Google OAuth 2.0</text>
+  <text x="350" y="318" text-anchor="middle" fill="#94A3B8" font-size="9">JWT Session Verification</text>
+  <text x="350" y="332" text-anchor="middle" fill="#94A3B8" font-size="9">Middleware Protection</text>
+
+
+  <!-- 2. APPLICATION TIER (VERCEL SERVERLESS) -->
+  <rect x="440" y="90" width="220" height="420" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="440" y="90" width="220" height="40" rx="16" fill="#1E293B"/>
+  <rect x="440" y="115" width="220" height="15" fill="#1E293B"/>
+  <text x="550" y="116" text-anchor="middle" fill="#A855F7" font-size="14" font-weight="700">2. APPLICATION TIER</text>
+  <text x="550" y="132" text-anchor="middle" fill="#64748B" font-size="10">Vercel Serverless Functions</text>
+
+  <!-- Serverless Sub-components -->
+  <rect x="455" y="150" width="190" height="65" rx="8" fill="#0F172A" stroke="#7C3AED" stroke-width="1"/>
+  <text x="550" y="172" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Core REST API Routes</text>
+  <text x="550" y="190" text-anchor="middle" fill="#94A3B8" font-size="10">/api/tracker, /api/dashboard,</text>
+  <text x="550" y="204" text-anchor="middle" fill="#94A3B8" font-size="10">/api/discuss, /api/foundations</text>
+
+  <rect x="455" y="225" width="190" height="65" rx="8" fill="#0F172A" stroke="#06B6D4" stroke-width="1"/>
+  <text x="550" y="247" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Groq Multi-Key Engine</text>
+  <text x="550" y="265" text-anchor="middle" fill="#94A3B8" font-size="10">5-Key Auto-Rotation (429 Retry)</text>
+  <text x="550" y="279" text-anchor="middle" fill="#94A3B8" font-size="10">llama-3.3-70b-versatile</text>
+
+  <rect x="455" y="300" width="190" height="65" rx="8" fill="#0F172A" stroke="#10B981" stroke-width="1"/>
+  <text x="550" y="322" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Connection Pool Handler</text>
+  <text x="550" y="340" text-anchor="middle" fill="#94A3B8" font-size="10">Mongoose Connection Cache</text>
+  <text x="550" y="354" text-anchor="middle" fill="#94A3B8" font-size="10">(global._mongooseConn)</text>
+
+  <rect x="455" y="375" width="190" height="55" rx="8" fill="#0F172A" stroke="#F59E0B" stroke-width="1"/>
+  <text x="550" y="397" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Vercel Cron Service</text>
+  <text x="550" y="415" text-anchor="middle" fill="#94A3B8" font-size="10">/api/cron/streak-warning (Daily)</text>
+
+  <rect x="455" y="440" width="190" height="50" rx="8" fill="#0F172A" stroke="#EC4899" stroke-width="1"/>
+  <text x="550" y="460" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="600">Media Signature Service</text>
+  <text x="550" y="476" text-anchor="middle" fill="#94A3B8" font-size="10">/api/cloudinary/sign</text>
+
+
+  <!-- 3. EXTERNAL & DATA TIER -->
+  <rect x="695" y="90" width="165" height="420" rx="16" fill="url(#cardGrad)" stroke="#334155" stroke-width="1.5" filter="url(#shadow)"/>
+  <rect x="695" y="90" width="165" height="40" rx="16" fill="#1E293B"/>
+  <rect x="695" y="115" width="165" height="15" fill="#1E293B"/>
+  <text x="777" y="116" text-anchor="middle" fill="#10B981" font-size="14" font-weight="700">3. DATA &amp; SERVICES</text>
+  <text x="777" y="132" text-anchor="middle" fill="#64748B" font-size="10">Cloud Infrastructure</text>
+
+  <!-- External Services -->
+  <rect x="710" y="150" width="135" height="75" rx="8" fill="#0F172A" stroke="#10B981" stroke-width="1.5"/>
+  <text x="777" y="175" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="700">MongoDB Atlas</text>
+  <text x="777" y="193" text-anchor="middle" fill="#94A3B8" font-size="10">17 Mongoose Collections</text>
+  <text x="777" y="208" text-anchor="middle" fill="#94A3B8" font-size="9">Aggregations &amp; Indexes</text>
+
+  <rect x="710" y="240" width="135" height="75" rx="8" fill="#0F172A" stroke="#F97316" stroke-width="1.5"/>
+  <text x="777" y="265" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="700">Groq AI Cloud</text>
+  <text x="777" y="283" text-anchor="middle" fill="#94A3B8" font-size="10">Llama 3.3 70B Model</text>
+  <text x="777" y="298" text-anchor="middle" fill="#94A3B8" font-size="9">Inference API</text>
+
+  <rect x="710" y="330" width="135" height="75" rx="8" fill="#0F172A" stroke="#EC4899" stroke-width="1.5"/>
+  <text x="777" y="355" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="700">Cloudinary CDN</text>
+  <text x="777" y="373" text-anchor="middle" fill="#94A3B8" font-size="10">Media &amp; Image Assets</text>
+  <text x="777" y="388" text-anchor="middle" fill="#94A3B8" font-size="9">Optimized Transformations</text>
+
+  <rect x="710" y="420" width="135" height="70" rx="8" fill="#0F172A" stroke="#4285F4" stroke-width="1.5"/>
+  <text x="777" y="445" text-anchor="middle" fill="#F1F5F9" font-size="12" font-weight="700">Google Identity</text>
+  <text x="777" y="463" text-anchor="middle" fill="#94A3B8" font-size="10">OAuth 2.0 Verification</text>
+
+
+  <!-- CONNECTING ARROWS -->
+  <!-- Client to Auth Gate -->
+  <line x1="260" y1="300" x2="295" y2="300" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrowPrimary)"/>
+  
+  <!-- Auth Gate to Application Tier -->
+  <line x1="405" y1="300" x2="440" y2="300" stroke="#38BDF8" stroke-width="2" marker-end="url(#arrowPrimary)"/>
+
+  <!-- App Tier to MongoDB -->
+  <path d="M 645 185 L 710 185" stroke="#10B981" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- App Tier to Groq -->
+  <path d="M 645 275 L 710 275" stroke="#F97316" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- App Tier to Cloudinary -->
+  <path d="M 645 365 L 710 365" stroke="#EC4899" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Footer Info -->
+  <text x="450" y="535" text-anchor="middle" fill="#64748B" font-size="11">PlacementTracker Architecture Overview — Built with Next.js 14, MongoDB Atlas, Groq AI &amp; Vercel</text>
+</svg>

@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PlacementTracker — Software Requirements Specification</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    @page {
+      size: A4;
+      margin: 18mm 15mm 18mm 15mm;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: #1E293B;
+      line-height: 1.6;
+      font-size: 10pt;
+      background: #FFFFFF;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      color: #0F172A;
+      font-weight: 700;
+      page-break-after: avoid;
+    }
+
+    h1 {
+      font-size: 20pt;
+      color: #4C1D95;
+      border-bottom: 2.5px solid #7C3AED;
+      padding-bottom: 6px;
+      margin-top: 1.8em;
+      margin-bottom: 0.6em;
+      page-break-before: always;
+    }
+
+    h1:first-of-type {
+      page-break-before: avoid;
+    }
+
+    h2 {
+      font-size: 14pt;
+      color: #5B21B6;
+      border-left: 4px solid #06B6D4;
+      padding-left: 10px;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    h3 {
+      font-size: 11.5pt;
+      color: #1E1B4B;
+      margin-top: 1.2em;
+      margin-bottom: 0.4em;
+    }
+
+    h4 {
+      font-size: 10.5pt;
+      color: #334155;
+      margin-top: 1em;
+    }
+
+    /* Cover Page */
+    .cover-page {
+      height: 950px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      padding: 50px 40px;
+      background: linear-gradient(135deg, #0D0F1A 0%, #1E1B4B 100%);
+      color: #F8FAFC;
+      border-radius: 16px;
+      box-sizing: border-box;
+    }
+
+    .cover-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32pt;
+      font-weight: 700;
+      background: linear-gradient(90deg, #A78BFA, #38BDF8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .cover-subtitle {
+      font-size: 16pt;
+      color: #94A3B8;
+      font-weight: 500;
+    }
+
+    .cover-meta {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 24px;
+      border-radius: 12px;
+    }
+
+    .cover-meta table {
+      width: 100%;
+      color: #E2E8F0;
+      border-collapse: collapse;
+    }
+
+    .cover-meta td {
+      padding: 8px 12px;
+      border: none !important;
+      background: transparent !important;
+    }
+
+    .cover-meta td.label {
+      font-weight: 600;
+      color: #38BDF8;
+      width: 160px;
+    }
+
+    /* Tables */
+    table.srs-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.2em 0;
+      font-size: 9pt;
+    }
+
+    table.srs-table th {
+      background-color: #1E1B4B;
+      color: #F8FAFC;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid #334155;
+    }
+
+    table.srs-table td {
+      padding: 7px 10px;
+      border: 1px solid #CBD5E1;
+    }
+
+    table.srs-table tr:nth-child(even) td {
+      background-color: #F8FAFC;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5pt;
+      background-color: #F1F5F9;
+      color: #6D28D9;
+      padding: 2px 5px;
+      border-radius: 4px;
+      border: 1px solid #E2E8F0;
+    }
+
+    pre {
+      background-color: #0D0F1A;
+      color: #F8FAFC;
+      padding: 14px 18px;
+      border-radius: 8px;
+      overflow-x: auto;
+      border: 1px solid #1E293B;
+    }
+
+    pre code {
+      background: transparent;
+      border: none;
+      color: #38BDF8;
+    }
+
+    blockquote {
+      border-left: 4px solid #7C3AED;
+      background-color: #F5F3FF;
+      margin: 1em 0;
+      padding: 10px 16px;
+      color: #4C1D95;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .diagram-container {
+      text-align: center;
+      margin: 24px 0;
+      page-break-inside: avoid;
+    }
+
+    ul, ol {
+      padding-left: 20px;
+      margin: 0.8em 0;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0.8em 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="cover-page">
+  <div>
+    <div style="font-size: 11pt; color: #38BDF8; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px;">Software Engineering & Academic Project Artifact</div>
+    <div class="cover-title">PlacementTracker (Study Buddy)</div>
+    <div class="cover-subtitle">Software Requirements Specification (SRS)</div>
+  </div>
+  
+  <div style="margin: 40px 0; font-size: 11.5pt; color: #CBD5E1; line-height: 1.8;">
+    A full-stack placement preparation tracking platform engineered specifically for MCA students at Sri Venkateswara College of Engineering (SVCE). This document provides an exhaustive, code-verified specification of all system requirements, architectural patterns, schemas, and operational constraints.
+  </div>
+
+  <div class="cover-meta">
+    <table>
+      <tr>
+        <td class="label">Project Title:</td>
+        <td>PlacementTracker — SVCE Placement Prep Suite</td>
+      </tr>
+      <tr>
+        <td class="label">Target Audience:</td>
+        <td>SVCE MCA Students & Faculty Review Panel</td>
+      </tr>
+      <tr>
+        <td class="label">System Version:</td>
+        <td>v1.0.0 (Production Release)</td>
+      </tr>
+      <tr>
+        <td class="label">Primary Stack:</td>
+        <td>Next.js 14 App Router, MongoDB Atlas, NextAuth, Groq LLM Engine</td>
+      </tr>
+      <tr>
+        <td class="label">Document Date:</td>
+        <td>July 2026</td>
+      </tr>
+      <tr>
+        <td class="label">Verification:</td>
+        <td>100% Codebase-Verified (17 Mongoose Models & Serverless API Routes)</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="cover-page">
+  <div class="cover-header">
+    <div style="font-size: 11pt; color: #38BDF8; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px;">Software Engineering & Academic Project Artifact</div>
+    <div class="cover-title">PlacementTracker (Study Buddy)</div>
+    <div class="cover-subtitle">Software Requirements Specification (SRS)</div>
+  </div>
+  
+  <div style="margin: 30px 0; font-size: 11pt; color: #CBD5E1; line-height: 1.7;">
+    A full-stack placement preparation tracking platform engineered specifically for MCA students at Sri Venkateswara College of Engineering (SVCE). This document provides an exhaustive, code-verified specification of all system requirements, architectural patterns, schemas, and operational constraints.
+  </div>
+
+<div class="cover-meta">
+    <table>
+      <table class="srs-table"><tr>
+        <td class="label">Project Title:</td>
+        <td>PlacementTracker — SVCE Placement Prep Suite</td>
+      </tr>
+</tbody></table>      <table class="srs-table"><tr>
+        <td class="label">Target Audience:</td>
+        <td>SVCE MCA Students & Faculty Review Panel</td>
+      </tr>
+</tbody></table>      <table class="srs-table"><tr>
+        <td class="label">System Version:</td>
+        <td>v1.0.0 (Production Release)</td>
+      </tr>
+</tbody></table>      <table class="srs-table"><tr>
+        <td class="label">Primary Stack:</td>
+        <td>Next.js 14 App Router, MongoDB Atlas, NextAuth, Groq LLM Engine</td>
+      </tr>
+</tbody></table>      <table class="srs-table"><tr>
+        <td class="label">Document Date:</td>
+        <td>July 2026</td>
+      </tr>
+</tbody></table>      <table class="srs-table"><tr>
+        <td class="label">Verification:</td>
+        <td>100% Codebase-Verified (17 Mongoose Models & Serverless API Routes)</td>
+      </tr>
+</tbody></table>    </table>
+  </div>
+</div>
+
+<h1 id="Table of Contents">Table of Contents</h1>
+
+<ul><li>[1. Introduction](#1-introduction)</li>
+</ul>  - [1.1 Purpose](#11-purpose)
+  - [1.2 Scope](#12-scope)
+  - [1.3 Intended Audience](#13-intended-audience)
+  - [1.4 Definitions and Acronyms](#14-definitions-and-acronyms)
+<ul><li>[2. Overall Description](#2-overall-description)</li>
+</ul>  - [2.1 Product Perspective](#21-product-perspective)
+  - [2.2 Product Features](#22-product-features)
+  - [2.3 User Classes and Characteristics](#23-user-classes-and-characteristics)
+  - [2.4 Operating Environment](#24-operating-environment)
+<ul><li>[3. System Architecture](#3-system-architecture)</li>
+</ul>  - [3.1 Tech Stack Infrastructure](#31-tech-stack-infrastructure)
+  - [3.2 High-Level Architecture Diagram](#32-high-level-architecture-diagram)
+  - [3.3 Caching & Performance Strategy](#33-caching--performance-strategy)
+<ul><li>[4. Data Models & Schemas](#4-data-models--schemas)</li>
+</ul>  - [4.1 Core User & Auth Models](#41-core-user--auth-models)
+  - [4.2 DSA Tracker & Progress Models](#42-dsa-tracker--progress-models)
+  - [4.3 Company Preparation Models](#43-company-preparation-models)
+  - [4.4 Community & Discuss Forum Models](#44-community--discuss-forum-models)
+  - [4.5 Logic Foundations Models](#45-logic-foundations-models)
+  - [4.6 AI Assistant & Notification Models](#46-ai-assistant--notification-models)
+<ul><li>[5. Functional Requirements](#5-functional-requirements)</li>
+</ul>  - [FR-1: Authentication & Session Management](#fr-1-authentication--session-management)
+  - [FR-2: Student Onboarding & Target Setting](#fr-2-student-onboarding--target-setting)
+  - [FR-3: DSA Progress Tracker & Tiered Grouping](#fr-3-dsa-progress-tracker--tiered-grouping)
+  - [FR-4: Daily Activity Log & Streak Engine](#fr-4-daily-activity-log--streak-engine)
+  - [FR-5: Student Performance Dashboard](#fr-5-student-performance-dashboard)
+  - [FR-6: Company-Specific Placement Preparation](#fr-6-company-specific-placement-preparation)
+  - [FR-7: Peer Leaderboard & Ranking System](#fr-7-peer-leaderboard--ranking-system)
+  - [FR-8: Peer Discuss Forum & Q&A](#fr-8-peer-discuss-forum--qa)
+  - [FR-9: Notification Engine & Automated Cron Reminders](#fr-9-notification-engine--automated-cron-reminders)
+  - [FR-10: AI Study Buddy Chatbot](#fr-10-ai-study-buddy-chatbot)
+  - [FR-11: Logic Foundations Zone](#fr-11-logic-foundations-zone)
+  - [FR-12: Terms of Service Agreement Gate](#fr-12-terms-of-service-agreement-gate)
+  - [FR-13: Interactive Code Console (UI Teaser / Future Scope)](#fr-13-interactive-code-console-ui-teaser--future-scope)
+<ul><li>[6. Non-Functional Requirements](#6-non-functional-requirements)</li>
+</ul>  - [6.1 Performance Requirements](#61-performance-requirements)
+  - [6.2 Scalability Requirements](#62-scalability-requirements)
+  - [6.3 Security Requirements](#63-security-requirements)
+  - [6.4 Reliability & Availability Requirements](#64-reliability--availability-requirements)
+  - [6.5 Usability & Accessibility Requirements](#65-usability--accessibility-requirements)
+  - [6.6 Privacy & Compliance](#66-privacy--compliance)
+<ul><li>[7. External Interface Requirements](#7-external-interface-requirements)</li>
+<li>[8. Future Scope & Roadmap](#8-future-scope--roadmap)</li>
+<li>[9. Conclusion](#9-conclusion)</li>
+</ul>
+---
+
+<h1 id="1. Introduction">1. Introduction</h1>
+
+<h2 id="1.1 Purpose">1.1 Purpose</h2>
+<strong>PlacementTracker (Study Buddy)</strong> is a specialized, web-based placement preparation and progress tracking system developed specifically for Master of Computer Applications (MCA) students at Sri Venkateswara College of Engineering (SVCE).
+
+<p>Preparing for campus placement drives requires structured practice across Data Structures & Algorithms (DSA), company-specific problem sets, foundational programming concepts, and continuous peer benchmarking. Existing general-purpose tools lack localized tracking, peer collaboration tailored to college cohorts, and intelligent assistance. PlacementTracker solves this by delivering an integrated platform where students track DSA problem-solving counts, manage company target notes, engage in peer discussion, and receive personalized guidance from an AI assistant.</p>
+
+<p>This document serves as the authoritative <strong>Software Requirements Specification (SRS)</strong> for PlacementTracker. It details all operational capabilities, system architecture, database schemas, functional requirements, and performance parameters verified directly against the production codebase.</p>
+
+<h2 id="1.2 Scope">1.2 Scope</h2>
+PlacementTracker encompasses the following core operational modules:
+<ul><li>  <strong>Authentication & Onboarding</strong>: OAuth 2.0 single sign-on via Google workspace/personal accounts, custom goal setting, and branch/year profile completion.</li>
+</ul><em>   <strong>DSA Progress Tracker</strong>: Structured tracking across 12 canonical Data Structure and Algorithm topics categorized under four progressive learning tiers (</em>Fundamentals<em>, </em>Core Structures<em>, </em>Trees & Graphs<em>, and </em>Advanced*).
+<ul><li>  <strong>Company Preparation Hub</strong>: Tracking target hiring companies (e.g., TCS, Infosys, Accenture, Amazon, Zoho), setting preparation statuses (<code>not_started</code>, <code>in_progress</code>, <code>done</code>), maintaining rich markdown prep notes with autosave, and sharing preparation links.</li>
+<li>  <strong>Analytics Dashboard</strong>: Visual progress representation with animated statistics, streak counters, daily goal meters, and 3D canvas backgrounds.</li>
+<li>  <strong>Peer Leaderboard</strong>: Real-time student ranking engine supporting All-Time total problem counts, Weekly activity filters, and privacy-preserving Anonymous Mode.</li>
+<li>  <strong>Discuss Forum</strong>: Community discussion system supporting problem-linked posts, syntax-highlighted code snippets, image attachments, upvoting, nested replies, and accepted answer markings.</li>
+<li>  <strong>AI Study Buddy</strong>: An intelligent conversational chatbot powered by Groq's <code>llama-3.3-70b-versatile</code> LLM, utilizing multi-key failover rotation across 5 API keys and enforced daily query rate limits.</li>
+</ul><em>   <strong>Logic Foundations Zone</strong>: A dedicated practice area for beginners featuring categorized logic-building problems (</em>Warmup<em>, </em>Easy<em>, </em>Core*) with interactive hint toggles and sample test cases.
+<ul><li>  <strong>Notification Engine</strong>: Real-time in-app notification system for post replies, upvotes, accepted answers, and automated daily streak warning cron jobs.</li>
+<li>  <strong>Terms Gate</strong>: Mandatory Terms of Service modal flow enforcing user privacy and platform usage rules before application access.</li>
+</ul>
+<h3 id="Explicit Out-of-Scope Items">Explicit Out-of-Scope Items</h3>
+<em>   <strong>Live Code Execution Sandbox</strong>: The platform currently provides a visual UI teaser for the </em>Code Console*. In-browser code compilation and sandboxed code execution (via Judge0/Piston) are explicitly out-of-scope for the current production build and scheduled for v2.0.
+<ul><li>  <strong>Official Institutional Integration</strong>: PlacementTracker operates as an independent student-built tool and does not interface directly with SVCE's internal marks or attendance portal databases.</li>
+</ul>
+<h2 id="1.3 Intended Audience">1.3 Intended Audience</h2>
+This document is prepared for:
+1.  <strong>Academic Reviewers & Evaluation Panel</strong>: Faculty members evaluating the software engineering architecture, database design, and functional implementation for academic accreditation.
+2.  <strong>Software Developers & Maintainers</strong>: Engineers extending or maintaining the codebase, providing an exact reference for schemas, API contracts, and key rotation logic.
+3.  <strong>Student Users</strong>: SVCE MCA candidates seeking an overview of system capabilities and privacy controls.
+
+<h2 id="1.4 Definitions and Acronyms">1.4 Definitions and Acronyms</h2>
+
+<table class="srs-table"><thead><tr><th>Term / Acronym</th><th>Full Definition / Context</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><strong>DSA</strong></th><th>Data Structures and Algorithms — core curriculum for technical placement tests.</th></tr></thead><tbody>
+<tr><td><strong>SRS</strong></td><td>Software Requirements Specification — formal engineering document defining system scope.</td></tr>
+<tr><td><strong>NextAuth</strong></td><td>Open-source authentication library for Next.js implementing OAuth 2.0 session handling.</td></tr>
+<tr><td><strong>MongoDB Atlas</strong></td><td>Fully managed cloud database engine hosting PlacementTracker's 17 collection models.</td></tr>
+<tr><td><strong>Groq API</strong></td><td>Ultra-fast LPU inference engine powering the AI Study Buddy with <code>llama-3.3-70b-versatile</code>.</td></tr>
+<tr><td><strong>ISR</strong></td><td>Incremental Static Regeneration — Next.js rendering technique used for public profile caching.</td></tr>
+<tr><td><strong>SWR</strong></td><td>Stale-While-Revalidate — React hooks library for client-side data fetching and optimistic UI.</td></tr>
+<tr><td><strong>Cloudinary</strong></td><td>Cloud media storage platform managing user-uploaded discuss images via signed API signatures.</td></tr>
+<tr><td><strong>SVCE</strong></td><td>Sri Venkateswara College of Engineering — institutional context for the MCA batch deployment.</td></tr>
+</tbody></table>
+---
+
+<h1 id="2. Overall Description">2. Overall Description</h1>
+
+<h2 id="2.1 Product Perspective">2.1 Product Perspective</h2>
+PlacementTracker is a standalone, full-stack Web Application deployed on Vercel's serverless edge infrastructure. It operates on a multi-tier client-server architecture:
+
+<pre><code class="language-text">[ Web Browser Client ]  &lt;---&gt;  [ Next.js 14 Serverless Engine ]  &lt;---&gt;  [ MongoDB Atlas / Groq / Cloudinary ]
+</code></pre>
+
+<p>The application is completely self-contained. It leverages Google OAuth 2.0 for identity verification without storing plain text passwords. Persistence is handled via MongoDB Atlas, media is stored in Cloudinary, and AI capabilities are routed through Groq's high-speed inference cloud.</p>
+
+<h2 id="2.2 Product Features">2.2 Product Features</h2>
+The system provides 12 primary features:
+
+<pre><code class="language-text">                     ┌─────────────────────────────────────────────────────────┐
+                     │            PlacementTracker Feature Suite               │
+                     └────────────────────┬────────────────────────────────────┘
+                                          │
+    ┌───────────────────┬─────────────────┼───────────────────┬───────────────────┐
+    │                   │                 │                   │                   │
+┌───┴──────────┐ ┌──────┴───────┐ ┌───────┴───────┐ ┌─────────┴──────┐ ┌──────────┴────────┐
+│ Authentication│ │ DSA Tracker  │ │ Company Prep  │ │ AI Study Buddy│ │ Peer Leaderboard  │
+│ & Onboarding │ │ & Tier Group │ │ & Notes Hub   │ │ (5-Key Failover)│ │ (All/Weekly/Anon)│
+└──────────────┘ └──────────────┘ └───────────────┘ └───────────────┘ └───────────────────┘
+    │                   │                 │                   │                   │
+┌───┴──────────┐ ┌──────┴───────┐ ┌───────┴───────┐ ┌─────────┴──────┐ ┌──────────┴────────┐
+│ Discuss Q&A  │ │ Notifications│ │ Foundations   │ │ Performance   │ │ Terms Gate &      │
+│ Forum & Code │ │ & Cron Warnings│ │ Logic Zone   │ │ Dashboard 3D  │ │ Privacy Controls  │
+└──────────────┘ └──────────────┘ └───────────────┘ └───────────────┘ └───────────────────┘
+</code></pre>
+
+<p>1.  <strong>Google Authentication</strong>: Single-click login/registration via Google OAuth.
+2.  <strong>Guided Onboarding</strong>: Multi-step setup wizard for focus topic selection and daily problem targets.
+3.  <strong>Tiered DSA Tracker</strong>: Reordered topic layout categorized into 4 tiers with goal progress bars.
+4.  <strong>Company Hub</strong>: Preparation status management, resource sharing, and styled notepad notes.
+5.  <strong>AI Study Buddy Widget</strong>: Chatbot with personalized context injection, markdown support, and key rotation.
+6.  <strong>Leaderboard Engine</strong>: Real-time scoring based on solved problems, supporting anonymous toggle.
+7.  <strong>Community Discuss</strong>: Rich Q&A forum supporting syntax-highlighted code blocks and accepted answers.
+8.  <strong>Foundations Zone</strong>: Logic building problems categorized by difficulty with sample test cases.
+9.  <strong>Student Dashboard</strong>: Visual metrics dashboard with 3D canvas, daily goals, and streak metrics.
+10. <strong>Notification Bell</strong>: Unread indicator and list of forum interactions and automated streak warnings.
+11. <strong>Public Profiles</strong>: Shareable public student profile links cached with Incremental Static Regeneration (ISR).
+12. <strong>Code Console Teaser</strong>: Visual UI preview highlighting multi-language compilation roadmap.</p>
+
+<h2 id="2.3 User Classes and Characteristics">2.3 User Classes and Characteristics</h2>
+<ul><li>  <strong>Authenticated Students (Primary Class)</strong>: Logged-in SVCE MCA candidates. Possess full access to update tracker progress, write company notes, post on Discuss, query the AI Study Buddy, and customize leaderboard anonymity.</li>
+<li>  <strong>Public Visitors (Secondary Class)</strong>: Unauthenticated external viewers accessing student profile links (<code>/profile/[userId]</code>). Access is restricted to read-only views of publicly shareable progress statistics.</li>
+<li>  <strong>System Cron Executor</strong>: Automated service account executing daily background jobs (<code>/api/cron/streak-warning</code>) authorized via <code>CRON_SECRET</code>.</li>
+</ul>
+<h2 id="2.4 Operating Environment">2.4 Operating Environment</h2>
+PlacementTracker is designed to operate under the following environment:
+<ul><li>  <strong>Client Side</strong>: Modern HTML5/CSS3 browsers (Google Chrome 100+, Mozilla Firefox 100+, Apple Safari 15+, Microsoft Edge 100+). Mobile responsive from 360px viewport widths up to 4K displays.</li>
+<li>  <strong>Server Side</strong>: Node.js runtime (v18.x / v20.x) executing on Vercel Serverless Functions.</li>
+<li>  <strong>Database Tier</strong>: MongoDB Atlas Cluster (v6.0+ Wire Protocol compliant).</li>
+</ul>
+---
+
+<h1 id="3. System Architecture">3. System Architecture</h1>
+
+<h2 id="3.1 Tech Stack Infrastructure">3.1 Tech Stack Infrastructure</h2>
+
+<table class="srs-table"><thead><tr><th>Layer / Subsystem</th><th>Technology Selected</th><th>Version / Package</th><th>Strategic Justification</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><strong>Frontend Framework</strong></th><th>Next.js App Router</th><th><code>v14.2.35</code></th><th>Server-Side Rendering (SSR), API routes, and optimized client routing.</th></tr></thead><tbody>
+<tr><td><strong>UI Library & Styling</strong></td><td>React + Tailwind CSS</td><td><code>React 18</code> / <code>v3.4.1</code></td><td>Utility-first responsive design, dark mode palette, and design consistency.</td></tr>
+<tr><td><strong>Motion & 3D</strong></td><td>Framer Motion & R3F</td><td><code>framer-motion 12</code>, <code>@react-three/fiber 8</code></td><td>Fluid micro-animations, layout transitions, and interactive 3D background canvas.</td></tr>
+<tr><td><strong>Data Fetching</strong></td><td>SWR</td><td><code>v2.4.2</code></td><td>Client-side stale-while-revalidate caching, optimistic updates, and fast re-renders.</td></tr>
+<tr><td><strong>Database ORM</strong></td><td>Mongoose</td><td><code>v9.7.2</code></td><td>Strictly typed schema enforcement and collection index orchestration.</td></tr>
+<tr><td><strong>Cloud Database</strong></td><td>MongoDB Atlas</td><td>Cloud Cluster</td><td>Scalable document storage with connection pooling for serverless execution.</td></tr>
+<tr><td><strong>Authentication</strong></td><td>NextAuth.js</td><td><code>v4.24.14</code></td><td>Secure JWT session management with <code>@auth/mongodb-adapter</code> integration.</td></tr>
+<tr><td><strong>AI Inference</strong></td><td>Groq SDK</td><td><code>groq-sdk 1.3.0</code></td><td>Ultra-fast execution of <code>llama-3.3-70b-versatile</code> with custom 5-key failover.</td></tr>
+<tr><td><strong>Media Storage</strong></td><td>Cloudinary</td><td><code>next-cloudinary 6.17</code></td><td>Cloud media uploads, auto-optimization, and signed upload signature generation.</td></tr>
+</tbody></table>
+<h2 id="3.2 High-Level Architecture Diagram">3.2 High-Level Architecture Diagram</h2>
+The system architecture follows a gated serverless model. Requests originating from the client browser pass through NextAuth middleware for authentication validation before hitting Next.js serverless API routes. API handlers interface with MongoDB Atlas via a cached connection pool handler, communicate with Groq AI using multi-key failover logic, and issue signed media upload tokens for Cloudinary.
+
+<pre><code class="language-text">+-----------------------------------------------------------------------------------+
+<table class="srs-table"><thead><tr><th>CLIENT TIER</th></tr></thead><tbody>
+<tr><td>+-----------------------------------------------------------------------------+</td></tr>
+<tr><td></td><td>Next.js 14 App Router (React 18 Client)</td><td></td></tr>
+<tr><td></td><td>[Tracker]  [Dashboard 3D]  [Company Hub]  [Discuss Forum]  [AI Study Buddy]</td><td></td></tr>
+<tr><td>+-----------------------------------------------------------------------------+</td></tr>
+</tbody></table>+-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+<table class="srs-table"><thead><tr><th>SECURITY & AUTH GATEWAY</th></tr></thead><tbody>
+<tr><td>NextAuth.js (Google OAuth 2.0)</td><td>JWT Session Middleware Verification</td></tr>
+</tbody></table>+-----------------------------------------+-----------------------------------------+
+                                          |
+                                          v
++-----------------------------------------------------------------------------------+
+<table class="srs-table"><thead><tr><th>APPLICATION TIER (VERCEL SERVERLESS)</th></tr></thead><tbody>
+<tr><td>+-----------------------+  +-----------------------+  +-----------------------+</td></tr>
+<tr><td></td><td>Core REST API Routes</td><td></td><td>Groq Multi-Key Engine</td><td></td><td>Mongoose Pool Cache</td><td></td></tr>
+<tr><td></td><td>(/api/tracker, /api/*)</td><td></td><td>(5 Keys / 429 Failover)</td><td></td><td>(global._mongooseConn)</td><td></td></tr>
+<tr><td>+-----------------------+  +-----------------------+  +-----------------------+</td></tr>
+<tr><td>+-----------------------+  +--------------------------------------------------+</td></tr>
+<tr><td></td><td>Vercel Cron Job Engine</td><td></td><td>Cloudinary Signature Service (/api/cloudinary)</td><td></td></tr>
+<tr><td>+-----------------------+  +--------------------------------------------------+</td></tr>
+</tbody></table>+-----------------------------------------+-----------------------------------------+
+                                          |
+        +---------------------------------+---------------------------------+
+        |                                 |                                 |
+        v                                 v                                 v
++---------------+                 +---------------+                 +---------------+
+<table class="srs-table"><thead><tr><th>MongoDB Atlas</th><th></th><th>Groq AI Cloud</th><th></th><th>Cloudinary CDN</th></tr></thead><tbody>
+<tr><td>(17 Schemas)</td><td></td><td>(Llama 3.3 70B</td><td></td><td>(Media Assets)</td></tr>
+</tbody></table>+---------------+                 +---------------+                 +---------------+
+</code></pre>
+
+<h2 id="3.3 Caching & Performance Strategy">3.3 Caching & Performance Strategy</h2>
+1.  <strong>Database Connection Pooling</strong>: Serverless functions instantiate new environments dynamically. PlacementTracker uses a global connection cache (<code>global._mongooseConn</code> in <code>lib/dbConnect.ts</code>) to reuse active Mongoose connections across warm lambda invocations, eliminating MongoDB connection overhead.
+2.  <strong>Optimistic UI Updates</strong>: Client-side state in the DSA Tracker and Discuss Forum updates immediately upon user action, issuing background HTTP requests. If the network call fails, state cleanly rolls back with Sonner toast notifications.
+3.  <strong>Public Profile ISR</strong>: Public student profile routes (<code>/profile/[userId]</code>) utilize Next.js Incremental Static Regeneration (<code>export const revalidate = 60</code>) to serve pre-rendered HTML from Vercel's Edge Network while background-updating every 60 seconds.
+
+<p>---</p>
+
+<h1 id="4. Data Models & Schemas">4. Data Models & Schemas</h1>
+
+<p>PlacementTracker's database architecture consists of <strong>17 Mongoose models</strong>. Below are the exact, code-verified field definitions, data types, and operational purposes.</p>
+
+<h2 id="4.1 Core User & Auth Models">4.1 Core User & Auth Models</h2>
+
+<h3 id="1. User Model (<code>User.ts</code>)">1. User Model (<code>User.ts</code>)</h3>
+Stores core student account metadata, activity metrics, and terms acceptance state.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>name</code></th><th><code>String</code></th><th><code>required: true</code></th><th>Full student name from Google OAuth profile.</th></tr></thead><tbody>
+<tr><td><code>email</code></td><td><code>String</code></td><td><code>required: true, unique: true, index: true</code></td><td>Primary identifier; index accelerates session lookups.</td></tr>
+<tr><td><code>photoUrl</code></td><td><code>String</code></td><td><code>default: ""</code></td><td>Google account profile image URL.</td></tr>
+<tr><td><code>branch</code></td><td><code>String</code></td><td>Optional</td><td>Academic branch (e.g., "MCA").</td></tr>
+<tr><td><code>year</code></td><td><code>String</code></td><td>Optional</td><td>Academic graduation year (e.g., "2026").</td></tr>
+<tr><td><code>currentStreak</code></td><td><code>Number</code></td><td><code>default: 0</code></td><td>Consecutive active problem-solving days.</td></tr>
+<tr><td><code>longestStreak</code></td><td><code>Number</code></td><td><code>default: 0</code></td><td>Maximum streak milestone achieved.</td></tr>
+<tr><td><code>lastActiveDate</code></td><td><code>Date</code></td><td>Optional</td><td>Timestamp of most recent problem submission.</td></tr>
+<tr><td><code>dailyGoal</code></td><td><code>Number</code></td><td><code>default: 5</code></td><td>Student-configured daily target problem count.</td></tr>
+<tr><td><code>termsAcceptedVersion</code></td><td><code>String</code></td><td><code>default: null</code></td><td>Version of Terms of Service accepted (e.g., "v1.0").</td></tr>
+<tr><td><code>termsAcceptedAt</code></td><td><code>Date</code></td><td><code>default: null</code></td><td>Exact timestamp when Terms were accepted.</td></tr>
+<tr><td><code>createdAt</code></td><td><code>Date</code></td><td>Mongoose timestamps</td><td>Account creation date.</td></tr>
+</tbody></table>
+<h3 id="2. UserOnboarding Model (<code>UserOnboarding.ts</code>)">2. UserOnboarding Model (<code>UserOnboarding.ts</code>)</h3>
+Tracks student progress through the 3-step setup wizard.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true, unique: true</code></th><th>Reference to owner student.</th></tr></thead><tbody>
+<tr><td><code>isComplete</code></td><td><code>Boolean</code></td><td><code>default: false</code></td><td>Flag indicating onboarding wizard completion.</td></tr>
+<tr><td><code>completedSteps</code></td><td><code>[String]</code></td><td>Array of step strings</td><td>List of completed setup steps (e.g., <code>["topics", "goal"]</code>).</td></tr>
+<tr><td><code>dailyGoal</code></td><td><code>Number</code></td><td><code>default: 5</code></td><td>Target setting selected during onboarding.</td></tr>
+</tbody></table>
+<h3 id="3. FeatureInterest Model (<code>FeatureInterest.ts</code>)">3. FeatureInterest Model (<code>FeatureInterest.ts</code>)</h3>
+Tracks student votes for prospective features (e.g., Code Console).
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Student registering feature interest.</th></tr></thead><tbody>
+<tr><td><code>feature</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Feature identifier string (e.g., <code>"code_console"</code>).</td></tr>
+<tr><td><code>requestedAt</code></td><td><code>Date</code></td><td><code>default: Date.now</code></td><td>Timestamp of interest registration.</td></tr>
+</tbody></table>
+<em>Compound Index</em>: <code>{ userId: 1, feature: 1 }</code> (unique constraint prevents duplicate votes).
+
+<h2 id="4.2 DSA Tracker & Progress Models">4.2 DSA Tracker & Progress Models</h2>
+
+<h3 id="4. Topic Model (<code>Topic.ts</code>)">4. Topic Model (<code>Topic.ts</code>)</h3>
+Defines the 12 canonical DSA topic modules and their resource links.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>name</code></th><th><code>String</code></th><th><code>required: true</code></th><th>Topic name (e.g., "Arrays", "Dynamic Programming").</th></tr></thead><tbody>
+<tr><td><code>order</code></td><td><code>Number</code></td><td><code>required: true</code></td><td>Sequence order (1 to 12) defining progression sequence.</td></tr>
+<tr><td><code>tier</code></td><td><code>String</code></td><td><code>enum: ["fundamentals", "core", "trees-graphs", "advanced"]</code></td><td>Learning progression tier grouping.</td></tr>
+<tr><td><code>resourceLinks</code></td><td><code>[Subdoc]</code></td><td><code>{ title: String, url: String }[]</code></td><td>External reference tutorial links (Striver, NeetCode).</td></tr>
+</tbody></table>
+<h3 id="5. UserTopicProgress Model (<code>UserTopicProgress.ts</code>)">5. UserTopicProgress Model (<code>UserTopicProgress.ts</code>)</h3>
+Tracks an individual student's solved problem count for a given topic.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Reference to student.</th></tr></thead><tbody>
+<tr><td><code>topicId</code></td><td><code>ObjectId</code></td><td><code>ref: "Topic", required: true</code></td><td>Reference to target DSA topic.</td></tr>
+<tr><td><code>problemsSolved</code></td><td><code>Number</code></td><td><code>default: 0</code></td><td>Total problems logged under this topic.</td></tr>
+<tr><td><code>lastUpdated</code></td><td><code>Date</code></td><td><code>default: Date.now</code></td><td>Timestamp of last increment/exact update.</td></tr>
+</tbody></table>
+<em>Compound Index</em>: <code>{ userId: 1, topicId: 1 }</code> (unique constraint per user-topic pair).
+
+<h3 id="6. DailyActivityLog Model (<code>DailyActivityLog.ts</code>)">6. DailyActivityLog Model (<code>DailyActivityLog.ts</code>)</h3>
+Records daily problem-solving volume for streak calculations and activity graphs.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Reference to student.</th></tr></thead><tbody>
+<tr><td><code>date</code></td><td><code>Date</code></td><td><code>required: true</code></td><td>Normalized midnight UTC date object.</td></tr>
+<tr><td><code>problemsSolvedThatDay</code></td><td><code>Number</code></td><td><code>default: 0</code></td><td>Total problems logged on this specific calendar date.</td></tr>
+</tbody></table>
+<em>Compound Index</em>: <code>{ userId: 1, date: 1 }</code> (unique constraint per user-date pair).
+
+<h2 id="4.3 Company Preparation Models">4.3 Company Preparation Models</h2>
+
+<h3 id="7. Company Model (<code>Company.ts</code>)">7. Company Model (<code>Company.ts</code>)</h3>
+Master directory of campus recruitment target companies.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>name</code></th><th><code>String</code></th><th><code>required: true</code></th><th>Company name (e.g., "TCS", "Accenture", "Amazon").</th></tr></thead><tbody>
+<tr><td><code>isCustom</code></td><td><code>Boolean</code></td><td><code>default: false</code></td><td>Flag indicating user-added custom target company.</td></tr>
+<tr><td><code>createdBy</code></td><td><code>ObjectId</code></td><td><code>ref: "User", default: null</code></td><td>Creator user ID if custom company.</td></tr>
+</tbody></table>
+<h3 id="8. UserCompanyPrep Model (<code>UserCompanyPrep.ts</code>)">8. UserCompanyPrep Model (<code>UserCompanyPrep.ts</code>)</h3>
+Tracks student preparation status and private rich notes for a company.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Reference to student.</th></tr></thead><tbody>
+<tr><td><code>companyId</code></td><td><code>ObjectId</code></td><td><code>ref: "Company", required: true</code></td><td>Reference to target company.</td></tr>
+<tr><td><code>status</code></td><td><code>String</code></td><td><code>enum: ["not_started", "in_progress", "done"]</code></td><td>Student prep status.</td></tr>
+<tr><td><code>notes</code></td><td><code>String</code></td><td><code>default: ""</code></td><td>Custom markdown preparation notes.</td></tr>
+<tr><td><code>lastUpdated</code></td><td><code>Date</code></td><td><code>default: Date.now</code></td><td>Timestamp of last note/status modification.</td></tr>
+</tbody></table>
+<em>Compound Index</em>: <code>{ userId: 1, companyId: 1 }</code> (unique constraint per user-company pair).
+
+<h3 id="9. CompanyResource Model (<code>CompanyResource.ts</code>)">9. CompanyResource Model (<code>CompanyResource.ts</code>)</h3>
+Crowdsourced study resources linked to specific companies.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>companyId</code></th><th><code>ObjectId</code></th><th><code>ref: "Company", required: true</code></th><th>Target company reference.</th></tr></thead><tbody>
+<tr><td><code>addedBy</code></td><td><code>ObjectId</code></td><td><code>ref: "User", required: true</code></td><td>Student who posted the link.</td></tr>
+<tr><td><code>title</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Resource title (e.g., "TCS NQT Past Papers").</td></tr>
+<tr><td><code>url</code></td><td><code>String</code></td><td><code>required: true</code></td><td>External web URL.</td></tr>
+<tr><td><code>createdAt</code></td><td><code>Date</code></td><td>Mongoose timestamps</td><td>Creation timestamp.</td></tr>
+</tbody></table>
+<h2 id="4.4 Community & Discuss Forum Models">4.4 Community & Discuss Forum Models</h2>
+
+<h3 id="10. DiscussPost Model (<code>DiscussPost.ts</code>)">10. DiscussPost Model (<code>DiscussPost.ts</code>)</h3>
+Primary peer forum discussion posts linked to DSA topics.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>authorId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Post author student ID.</th></tr></thead><tbody>
+<tr><td><code>topicId</code></td><td><code>ObjectId</code></td><td><code>ref: "Topic", required: true</code></td><td>Associated DSA topic.</td></tr>
+<tr><td><code>problemTitle</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Title of problem being discussed.</td></tr>
+<tr><td><code>problemUrl</code></td><td><code>String</code></td><td>Optional</td><td>External LeetCode/GFG problem link.</td></tr>
+<tr><td><code>title</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Forum post title.</td></tr>
+<tr><td><code>body</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Main discussion post text/code.</td></tr>
+<tr><td><code>images</code></td><td><code>[Subdoc]</code></td><td><code>{ url: String, cloudinaryPublicId: String }[]</code></td><td>Uploaded Cloudinary image attachments.</td></tr>
+<tr><td><code>upvotes</code></td><td><code>Number</code></td><td><code>default: 0</code></td><td>Total net upvote score.</td></tr>
+<tr><td><code>upvotedBy</code></td><td><code>[ObjectId]</code></td><td><code>ref: "User"</code></td><td>List of user IDs who upvoted this post.</td></tr>
+</tbody></table>
+<em>Indexes</em>: <code>{ createdAt: -1 }</code>, <code>{ topicId: 1, createdAt: -1 }</code>, <code>{ upvotes: -1 }</code>.
+
+<h3 id="11. DiscussReply Model (<code>DiscussReply.ts</code>)">11. DiscussReply Model (<code>DiscussReply.ts</code>)</h3>
+Replies and answers submitted under discuss posts.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>postId</code></th><th><code>ObjectId</code></th><th><code>ref: "DiscussPost", required: true</code></th><th>Parent discuss post reference.</th></tr></thead><tbody>
+<tr><td><code>parentReplyId</code></td><td><code>ObjectId</code></td><td><code>ref: "DiscussReply", default: null</code></td><td>Parent reply reference for nested threads.</td></tr>
+<tr><td><code>authorId</code></td><td><code>ObjectId</code></td><td><code>ref: "User", required: true</code></td><td>Reply author student ID.</td></tr>
+<tr><td><code>body</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Reply markdown content.</td></tr>
+<tr><td><code>images</code></td><td><code>[Subdoc]</code></td><td><code>{ url: String, cloudinaryPublicId: String }[]</code></td><td>Reply image attachments.</td></tr>
+<tr><td><code>upvotes</code></td><td><code>Number</code></td><td><code>default: 0</code></td><td>Reply net upvote count.</td></tr>
+<tr><td><code>upvotedBy</code></td><td><code>[ObjectId]</code></td><td><code>ref: "User"</code></td><td>List of user IDs who upvoted this reply.</td></tr>
+<tr><td><code>isAccepted</code></td><td><code>Boolean</code></td><td><code>default: false</code></td><td>Flag set by post author marking accepted solution.</td></tr>
+</tbody></table>
+<h2 id="4.5 Logic Foundations Models">4.5 Logic Foundations Models</h2>
+
+<h3 id="12. FoundationCategory Model (<code>FoundationCategory.ts</code>)">12. FoundationCategory Model (<code>FoundationCategory.ts</code>)</h3>
+Categories for beginners' logic building modules.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>name</code></th><th><code>String</code></th><th><code>required: true, unique: true</code></th><th>Module name (e.g., "Pattern Printing", "Loops").</th></tr></thead><tbody>
+<tr><td><code>order</code></td><td><code>Number</code></td><td><code>required: true, index: true</code></td><td>Display order sequence.</td></tr>
+<tr><td><code>description</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Short module summary.</td></tr>
+<tr><td><code>icon</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Lucide icon identifier key.</td></tr>
+</tbody></table>
+<h3 id="13. FoundationProblem Model (<code>FoundationProblem.ts</code>)">13. FoundationProblem Model (<code>FoundationProblem.ts</code>)</h3>
+Individual practice problems inside logic foundation categories.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>categoryId</code></th><th><code>ObjectId</code></th><th><code>ref: "FoundationCategory", required: true</code></th><th>Parent category reference.</th></tr></thead><tbody>
+<tr><td><code>title</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Problem title.</td></tr>
+<tr><td><code>difficulty</code></td><td><code>String</code></td><td><code>enum: ["warmup", "easy", "core"], required: true</code></td><td>Difficulty classification tier.</td></tr>
+<tr><td><code>statement</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Problem description and rules.</td></tr>
+<tr><td><code>approachHint</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Step-by-step logic hint.</td></tr>
+<tr><td><code>sampleInput</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Input example.</td></tr>
+<tr><td><code>sampleOutput</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Expected output string.</td></tr>
+<tr><td><code>order</code></td><td><code>Number</code></td><td><code>required: true</code></td><td>Order index inside category.</td></tr>
+</tbody></table>
+<h3 id="14. UserFoundationProgress Model (<code>UserFoundationProgress.ts</code>)">14. UserFoundationProgress Model (<code>UserFoundationProgress.ts</code>)</h3>
+Completion records for foundation problems.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Student reference.</th></tr></thead><tbody>
+<tr><td><code>problemId</code></td><td><code>ObjectId</code></td><td><code>ref: "FoundationProblem", required: true</code></td><td>Foundation problem reference.</td></tr>
+<tr><td><code>completed</code></td><td><code>Boolean</code></td><td><code>default: false</code></td><td>Problem completion flag.</td></tr>
+<tr><td><code>completedAt</code></td><td><code>Date</code></td><td>Optional</td><td>Completion timestamp.</td></tr>
+</tbody></table>
+<em>Compound Index</em>: <code>{ userId: 1, problemId: 1 }</code> (unique constraint).
+
+<h2 id="4.6 AI Assistant & Notification Models">4.6 AI Assistant & Notification Models</h2>
+
+<h3 id="15. AIChatMessage Model (<code>AIChatMessage.ts</code>)">15. AIChatMessage Model (<code>AIChatMessage.ts</code>)</h3>
+Stores persistent chat history between students and the AI Study Buddy.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Owner student reference.</th></tr></thead><tbody>
+<tr><td><code>role</code></td><td><code>String</code></td><td><code>enum: ["user", "assistant"], required: true</code></td><td>Message sender role.</td></tr>
+<tr><td><code>content</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Chat message text content.</td></tr>
+<tr><td><code>createdAt</code></td><td><code>Date</code></td><td>Mongoose timestamps</td><td>Message creation timestamp.</td></tr>
+</tbody></table>
+<em>Index</em>: <code>{ userId: 1, createdAt: -1 }</code> (accelerates conversation history retrieval).
+
+<h3 id="16. AIChatUsage Model (<code>AIChatUsage.ts</code>)">16. AIChatUsage Model (<code>AIChatUsage.ts</code>)</h3>
+Tracks daily query volume per student to enforce the 15 questions/day quota.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Student reference.</th></tr></thead><tbody>
+<tr><td><code>date</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Normalized date string (<code>"YYYY-MM-DD"</code>).</td></tr>
+<tr><td><code>questionsAsked</code></td><td><code>Number</code></td><td><code>default: 0</code></td><td>Counter tracking questions sent today.</td></tr>
+</tbody></table>
+<em>Compound Index</em>: <code>{ userId: 1, date: 1 }</code> (unique constraint per student-date).
+
+<h3 id="17. Notification Model (<code>Notification.ts</code>)">17. Notification Model (<code>Notification.ts</code>)</h3>
+In-app alert items triggered by community interactions and automated cron reminders.
+
+<table class="srs-table"><thead><tr><th>Field Name</th><th>Type</th><th>Options / Constraints</th><th>Operational Purpose</th></tr></thead><tbody>
+</tbody></table>
+<table class="srs-table"><thead><tr><th><code>userId</code></th><th><code>ObjectId</code></th><th><code>ref: "User", required: true</code></th><th>Target recipient student ID.</th></tr></thead><tbody>
+<tr><td><code>type</code></td><td><code>String</code></td><td><code>enum: ["reply_on_post", "reply_on_reply", "upvote_post", "upvote_reply", "accepted_answer", "streak_warning"]</code></td><td>Categorized notification trigger type.</td></tr>
+<tr><td><code>fromUserId</code></td><td><code>ObjectId</code></td><td><code>ref: "User", default: null</code></td><td>User who triggered the alert (null if system cron).</td></tr>
+<tr><td><code>referenceId</code></td><td><code>ObjectId</code></td><td><code>default: null</code></td><td>Target post or reply ID for navigation.</td></tr>
+<tr><td><code>message</code></td><td><code>String</code></td><td><code>required: true</code></td><td>Formatted notification text.</td></tr>
+<tr><td><code>isRead</code></td><td><code>Boolean</code></td><td><code>default: false</code></td><td>Read status flag for top-nav bell badge count.</td></tr>
+<tr><td><code>createdAt</code></td><td><code>Date</code></td><td>Mongoose timestamps</td><td>Alert creation timestamp.</td></tr>
+</tbody></table>
+<em>Indexes</em>: <code>{ userId: 1, isRead: 1 }</code> (polled every 60s for badge), <code>{ userId: 1, createdAt: -1 }</code>.
+
+<p>---</p>
+
+<h1 id="5. Functional Requirements">5. Functional Requirements</h1>
+
+<h2 id="FR-1: Authentication & Session Management">FR-1: Authentication & Session Management</h2>
+<ul><li>  <strong>FR-1.1</strong>: The system shall authenticate users exclusively via Google OAuth 2.0 through NextAuth.js.</li>
+<li>  <strong>FR-1.2</strong>: Upon successful authentication, the system shall verify if a corresponding <code>User</code> record exists in MongoDB. If absent, the system shall automatically initialize a new <code>User</code> document populated with profile metadata (<code>name</code>, <code>email</code>, <code>photoUrl</code>).</li>
+<li>  <strong>FR-1.3</strong>: The system shall enforce JWT session security across all protected routes via Next.js middleware. Unauthenticated requests attempting to access <code>/dashboard</code>, <code>/tracker</code>, <code>/companies</code>, <code>/discuss</code>, <code>/leaderboard</code>, or <code>/foundations</code> shall be redirected to the sign-in landing view.</li>
+</ul>
+<h2 id="FR-2: Student Onboarding & Target Setting">FR-2: Student Onboarding & Target Setting</h2>
+<ul><li>  <strong>FR-2.1</strong>: New users with incomplete onboarding records (<code>UserOnboarding.isComplete === false</code>) shall be routed to the 3-step Onboarding Wizard (<code>/onboarding</code>).</li>
+<li>  <strong>FR-2.2</strong>: Step 1 shall allow students to select focus DSA topics from the 12 master topics.</li>
+<li>  <strong>FR-2.3</strong>: Step 2 shall allow students to configure a daily problem goal using an interactive range slider (1 to 20 problems/day; default: 5).</li>
+<li>  <strong>FR-2.4</strong>: Step 3 shall display the student's initial leaderboard placement rank and complete the onboarding status.</li>
+</ul>
+<h2 id="FR-3: DSA Progress Tracker & Tiered Grouping">FR-3: DSA Progress Tracker & Tiered Grouping</h2>
+<ul><li>  <strong>FR-3.1</strong>: The system shall display the 12 DSA topics sorted strictly by their <code>order</code> index (1 to 12) and visually grouped into four distinct learning progression tiers:</li>
+</ul>    1.  <strong>Tier 1 — Fundamentals</strong>: <em>Arrays</em>, <em>Strings</em>, <em>Hashing</em>, <em>Sorting & Searching</em>.
+    2.  <strong>Tier 2 — Core Structures</strong>: <em>Linked List</em>, <em>Stacks & Queues</em>, <em>Recursion & Backtracking</em>.
+    3.  <strong>Tier 3 — Trees & Graphs</strong>: <em>Trees</em>, <em>Graphs</em>.
+    4.  <strong>Tier 4 — Advanced</strong>: <em>Greedy</em>, <em>Bit Manipulation</em>, <em>Dynamic Programming</em>.
+<em>   <strong>FR-3.2</strong>: Each topic card shall display the student's solved count, a progress bar relative to the target goal (30 problems soft target), curated external video/tutorial resource links, and collapsible practice problem lists categorized by difficulty (</em>Easy<em>, </em>Medium<em>, </em>Hard<em>) and platform (</em>LeetCode<em>, </em>GFG*).
+<ul><li>  <strong>FR-3.3</strong>: The system shall support both single-click increment (<code>+1</code>) and exact numerical input overrides for updating topic progress via <code>PATCH /api/tracker/[topicId]</code>.</li>
+<li>  <strong>FR-3.4</strong>: For users with under 10 total solved problems, the system shall render a dismissible beginner guidance hint recommending sequential progress through Tier 1.</li>
+</ul>
+<h2 id="FR-4: Daily Activity Log & Streak Engine">FR-4: Daily Activity Log & Streak Engine</h2>
+<ul><li>  <strong>FR-4.1</strong>: Whenever a student increments or updates topic progress, the system shall record or update a <code>DailyActivityLog</code> entry for the current date.</li>
+<li>  <strong>FR-4.2</strong>: The system shall compute <code>currentStreak</code> by checking consecutive daily activity logs working backward from today. If activity occurred today or yesterday, the streak remains active; if inactive for over 48 hours, <code>currentStreak</code> resets to 0.</li>
+<li>  <strong>FR-4.3</strong>: <code>longestStreak</code> shall automatically update whenever <code>currentStreak</code> exceeds the historic maximum.</li>
+</ul>
+<h2 id="FR-5: Student Performance Dashboard">FR-5: Student Performance Dashboard</h2>
+<em>   <strong>FR-5.1</strong>: The dashboard (<code>/dashboard</code>) shall render four animated stat cards: </em>Total Solved<em>, </em>Current Streak<em>, </em>Topics Touched<em>, and </em>Companies Prepping*.
+<ul><li>  <strong>FR-5.2</strong>: The system shall display Today's Goal progress meter comparing today's logged count against <code>User.dailyGoal</code>.</li>
+<li>  <strong>FR-5.3</strong>: An interactive Recharts bar chart shall visualize problem distribution across the 12 topics sorted by tier order.</li>
+<li>  <strong>FR-5.4</strong>: The dashboard header shall render a dynamic Three.js canvas background generating procedural wave animations.</li>
+</ul>
+<h2 id="FR-6: Company-Specific Placement Preparation">FR-6: Company-Specific Placement Preparation</h2>
+<ul><li>  <strong>FR-6.1</strong>: The system shall maintain a master list of target companies (<code>/companies</code>) and allow students to filter by prep status (<code>not_started</code>, <code>in_progress</code>, <code>done</code>).</li>
+<li>  <strong>FR-6.2</strong>: Students shall be able to add custom companies via <code>POST /api/companies</code> (<code>isCustom: true</code>).</li>
+<li>  <strong>FR-6.3</strong>: Expanding a company card shall reveal a custom notepad interface allowing markdown prep notes with real-time character count, auto-save status indicator, and explicit Save/Discard controls.</li>
+<li>  <strong>FR-6.4</strong>: Students shall be able to share crowdsourced resource links for any company (<code>POST /api/companies/[companyId]/resources</code>).</li>
+</ul>
+<h2 id="FR-7: Peer Leaderboard & Ranking System">FR-7: Peer Leaderboard & Ranking System</h2>
+<ul><li>  <strong>FR-7.1</strong>: The system shall aggregate total solved problem counts across all students and render a ranked leaderboard (<code>/leaderboard</code>).</li>
+<li>  <strong>FR-7.2</strong>: The system shall support two view modes: <strong>All-Time</strong> (lifetime total solved) and <strong>Weekly</strong> (problems logged in the trailing 7 days).</li>
+<li>  <strong>FR-7.3</strong>: Top 3 ranks shall feature distinct podium badges (Gold 🥇, Silver 🥈, Bronze 🥉).</li>
+<li>  <strong>FR-7.4</strong>: The system shall provide an <strong>Anonymous Mode</strong> toggle (<code>POST /api/leaderboard/anonymous</code>). When enabled, the user's name is rendered as "Anonymous Student" and their avatar is hidden on public rankings.</li>
+</ul>
+<h2 id="FR-8: Peer Discuss Forum & Q&A">FR-8: Peer Discuss Forum & Q&A</h2>
+<em>   <strong>FR-8.1</strong>: The system shall support community discussions (<code>/discuss</code>) filtered by topic and sorted by </em>Latest<em>, </em>Most Upvoted<em>, or </em>Unanswered*.
+<ul><li>  <strong>FR-8.2</strong>: Posts shall include problem title, problem URL, post title, markdown body, code blocks with syntax highlighting, and optional Cloudinary image attachments.</li>
+<li>  <strong>FR-8.3</strong>: Authenticated users shall be able to upvote posts and replies. Duplicate upvotes toggle the upvote off.</li>
+<li>  <strong>FR-8.4</strong>: Post authors shall have sole authority to mark a reply as the <strong>Accepted Answer</strong> (<code>PATCH /api/discuss/[postId]/reply/[replyId]/accept</code>).</li>
+</ul>
+<h2 id="FR-9: Notification Engine & Automated Cron Reminders">FR-9: Notification Engine & Automated Cron Reminders</h2>
+<ul><li>  <strong>FR-9.1</strong>: The system shall create in-app notifications (<code>Notification</code> collection) when a user receives post replies, reply upvotes, or accepted answer markings.</li>
+<li>  <strong>FR-9.2</strong>: The top navigation bar shall render a notification bell icon polling unread count every 60 seconds (<code>GET /api/notifications/unread-count</code>).</li>
+<li>  <strong>FR-9.3</strong>: A daily Vercel Cron job (<code>/api/cron/streak-warning</code>) authorized via <code>CRON_SECRET</code> shall query users at risk of losing an active streak (>24h inactive) and auto-generate <code>streak_warning</code> notifications.</li>
+</ul>
+<h2 id="FR-10: AI Study Buddy Chatbot">FR-10: AI Study Buddy Chatbot</h2>
+<ul><li>  <strong>FR-10.1</strong>: The system shall provide a floating AI Study Buddy chat widget accessible across all pages.</li>
+<li>  <strong>FR-10.2</strong>: The API route (<code>POST /api/assistant</code>) shall construct a system context block containing the user's real name, streak, total solved count, topic breakdown, company notes, and 7-day activity.</li>
+<li>  <strong>FR-10.3</strong>: To prevent AI API failures, <code>askAssistant()</code> in <code>lib/ai.ts</code> shall execute multi-key rotation across <strong>5 Groq API keys</strong> (<code>GROQ_API_KEY_1</code> to <code>5</code>). Upon encountering an HTTP 429 rate limit error, the system shall seamlessly retry on the next key.</li>
+<li>  <strong>FR-10.4</strong>: The system shall enforce a strict daily rate limit of <strong>15 questions/day</strong> per user tracked via <code>AIChatUsage</code>.</li>
+<li>  <strong>FR-10.5</strong>: Chat history shall persist in <code>AIChatMessage</code>. A <strong>Clear Chat</strong> button in the widget header shall invoke <code>DELETE /api/assistant/history</code> to wipe persistent chat history.</li>
+</ul>
+<h2 id="FR-11: Logic Foundations Zone">FR-11: Logic Foundations Zone</h2>
+<em>   <strong>FR-11.1</strong>: The system shall provide a Logic Foundations zone (<code>/foundations</code>) for beginners featuring logic building modules (</em>Pattern Printing<em>, </em>Basic Math<em>, </em>Array Logic*).
+<em>   <strong>FR-11.2</strong>: Problems shall be classified into </em>Warmup<em>, </em>Easy<em>, and </em>Core* difficulties, complete with collapsible step-by-step logic hints, sample inputs, and expected outputs.
+
+<h2 id="FR-12: Terms of Service Agreement Gate">FR-12: Terms of Service Agreement Gate</h2>
+<ul><li>  <strong>FR-12.1</strong>: The system shall render a mandatory Terms of Service modal gate whenever an authenticated user has <code>termsAcceptedVersion === null</code>.</li>
+<li>  <strong>FR-12.2</strong>: The user must review platform privacy terms and click "I Agree" (<code>POST /api/user/accept-terms</code>), recording <code>termsAcceptedVersion: "v1.0"</code> and timestamp before proceeding to main application views.</li>
+</ul>
+<h2 id="FR-13: Interactive Code Console (UI Teaser / Future Scope)">FR-13: Interactive Code Console (UI Teaser / Future Scope)</h2>
+<em>   <strong>FR-13.1</strong>: The system shall render an interactive Code Console UI card (<code>/code-console</code>) showcasing a mock code editor interface with language selection tabs (</em>C++<em>, </em>Java<em>, </em>Python<em>, </em>JavaScript*).
+<ul><li>  <strong>FR-13.2</strong>: A floating modal feature interest registration prompt shall capture user clicks on "Notify Me When Live" (<code>POST /api/features/interest</code>), saving records to the <code>FeatureInterest</code> collection.</li>
+</ul>
+---
+
+<h1 id="6. Non-Functional Requirements">6. Non-Functional Requirements</h1>
+
+<h2 id="6.1 Performance Requirements">6.1 Performance Requirements</h2>
+<ul><li>  <strong>Database Query Optimization</strong>: Critical user session lookups utilize indexed fields (<code>User.email</code>, <code>DiscussPost.createdAt</code>, <code>Notification.userId + isRead</code>).</li>
+<li>  <strong>Serverless Connection Reuse</strong>: The Mongoose singleton connection wrapper prevents connection latency overhead during cold lambda invocations.</li>
+<li>  <strong>Client Response Time</strong>: UI state mutations execute optimistically within 50ms, maintaining 60fps animations.</li>
+</ul>
+<h2 id="6.2 Scalability Requirements">6.2 Scalability Requirements</h2>
+<ul><li>  <strong>Stateless Execution</strong>: All Next.js API routes are completely stateless, enabling automatic horizontal scaling on Vercel's serverless edge infrastructure.</li>
+<li>  <strong>Database Aggregation</strong>: Leaderboard queries utilize MongoDB aggregation pipelines (<code>$group</code>, <code>$sort</code>, <code>$limit</code>) capable of handling thousands of activity records efficiently.</li>
+</ul>
+<h2 id="6.3 Security Requirements">6.3 Security Requirements</h2>
+<ul><li>  <strong>OAuth Session Token Security</strong>: Session management relies entirely on encrypted HTTP-only JWT cookies managed by NextAuth.js.</li>
+<li>  <strong>Server-Side Environment Protection</strong>: Database credentials (<code>MONGODB_URI</code>), Groq API keys (<code>GROQ_API_KEY_1..5</code>), and Cloudinary secrets are strictly restricted to server-side execution and never exposed to the client bundle.</li>
+<li>  <strong>Cron Route Protection</strong>: The automated background endpoint (<code>/api/cron/streak-warning</code>) requires a valid <code>Authorization: Bearer <CRON_SECRET></code> header.</li>
+</ul>
+<h2 id="6.4 Reliability & Availability Requirements">6.4 Reliability & Availability Requirements</h2>
+<ul><li>  <strong>Groq Multi-Key Rotation</strong>: The AI subsystem tolerates rate-limit spikes on individual free-tier keys by automatically rotating across 5 configured keys before reporting an error.</li>
+<li>  <strong>Graceful API Degradation</strong>: Network failures during API calls trigger non-blocking toast notifications via Sonner, preserving local component state.</li>
+</ul>
+<h2 id="6.5 Usability & Accessibility Requirements">6.5 Usability & Accessibility Requirements</h2>
+<ul><li>  <strong>Responsive Layout</strong>: Fully adaptive layouts utilizing Tailwind CSS grid and flexbox patterns, supporting screen resolutions down to 360px width.</li>
+<li>  <strong>Visual Feedback</strong>: Comprehensive use of skeleton loading cards, button spinner states, and high-contrast badge indicators for optimal legibility.</li>
+</ul>
+<h2 id="6.6 Privacy & Compliance">6.6 Privacy & Compliance</h2>
+<ul><li>  <strong>Data Boundary Control</strong>: Private user assets (such as personal company notes and daily activity logs) are strictly filtered by session <code>userId</code> and never exposed on public endpoints.</li>
+<li>  <strong>Terms Agreement Tracking</strong>: Mandatory acceptance records (<code>termsAcceptedAt</code>, <code>termsAcceptedVersion</code>) ensure compliance with student privacy expectations.</li>
+</ul>
+---
+
+<h1 id="7. External Interface Requirements">7. External Interface Requirements</h1>
+
+<p>1.  <strong>Google Identity Provider (OAuth 2.0)</strong>
+    <em>   </em>Protocol*: OAuth 2.0 Authorization Code Flow.
+    <em>   </em>Interface*: NextAuth <code>GoogleProvider</code> using <code>GOOGLE_CLIENT_ID</code> and <code>GOOGLE_CLIENT_SECRET</code>.
+2.  <strong>MongoDB Atlas Cloud Database API</strong>
+    <em>   </em>Protocol*: MongoDB Wire Protocol via <code>mongoose</code>.
+    <em>   </em>Interface*: Connection string configured via <code>MONGODB_URI</code>.
+3.  <strong>Groq AI Inference Cloud</strong>
+    <em>   </em>Protocol*: HTTPS REST API via official <code>groq-sdk</code>.
+    <em>   </em>Interface*: Model <code>llama-3.3-70b-versatile</code> authenticated via <code>GROQ_API_KEY_1</code> through <code>5</code>.
+4.  <strong>Cloudinary Media Services</strong>
+    <em>   </em>Protocol*: HTTPS Signed Upload API via <code>next-cloudinary</code>.
+    <em>   </em>Interface*: Authenticated using <code>CLOUDINARY_API_KEY</code>, <code>CLOUDINARY_API_SECRET</code>, and <code>NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME</code>.
+5.  <strong>Vercel Cron Infrastructure</strong>
+    <em>   </em>Protocol*: HTTPS Scheduled GET request.
+    <em>   </em>Interface*: Bearer authentication validated against <code>CRON_SECRET</code>.</p>
+
+<p>---</p>
+
+<h1 id="8. Future Scope & Roadmap">8. Future Scope & Roadmap</h1>
+
+<pre><code class="language-text">+-----------------------------------------------------------------------------------+
+<table class="srs-table"><thead><tr><th>PLACEMENTTRACKER v2.0 ROADMAP</th></tr></thead><tbody>
+</tbody></table>+-----------------------------------------------------------------------------------+
+<table class="srs-table"><thead><tr><th>1. Sandboxed Multi-Language Code Execution Engine (Judge0 / Piston Integration)</th></tr></thead><tbody>
+<tr><td>2. Real-Time AI Mock Technical Interview Simulator with Audio Synthesis</td></tr>
+<tr><td>3. Company Placement Placement Analytics & Placement Drive Calendar Export</td></tr>
+<tr><td>4. Automated Resume Builder & Skill Gap Analysis Engine for SVCE MCA Cohorts</td></tr>
+</tbody></table>+-----------------------------------------------------------------------------------+
+</code></pre>
+
+<p>1.  <strong>Sandboxed Multi-Language Code Execution Engine</strong>: Transitioning the <em>Code Console</em> from a visual UI teaser into a functional live execution sandbox supporting C, C++, Java, and Python compilation via Judge0 or Piston APIs.
+2.  <strong>AI Mock Interview Simulator</strong>: Enhancing Study Buddy to conduct interactive, voice-assisted technical mock interviews tailored to student company targets.
+3.  <strong>Placement Analytics Export</strong>: Providing PDF report generation for students to export their DSA preparation progress for faculty reviews.</p>
+
+<p>---</p>
+
+<h1 id="9. Conclusion">9. Conclusion</h1>
+
+<p><strong>PlacementTracker (Study Buddy)</strong> provides a robust, institutional-grade placement preparation suite engineered specifically for SVCE MCA candidates. By combining structured DSA progression, company-specific preparation tracking, community discussion, and an intelligent 5-key failover AI Study Buddy, the platform bridges the gap between individual practice and collaborative success.</p>
+
+<p>This Software Requirements Specification accurately reflects the production implementation across all 17 database schemas, serverless API routes, and client components, establishing a solid foundation for academic evaluation and future platform enhancements.</p>
+
+</body>
+</html>
