@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import * as Sentry from "@sentry/nextjs";
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 
@@ -31,8 +32,20 @@ async function dbConnect() {
     });
   }
 
-  cached.conn = await cached.promise;
+  try {
+    cached.conn = await cached.promise;
+  } catch (err) {
+    // Clear the broken promise so the next call retries the connection
+    // instead of awaiting a permanently-failed promise.
+    cached.promise = null;
+    Sentry.captureException(err, {
+      tags: { layer: "database", operation: "mongoose.connect" },
+    });
+    throw err;
+  }
+
   return cached.conn;
 }
 
 export default dbConnect;
+

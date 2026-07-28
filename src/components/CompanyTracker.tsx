@@ -1,13 +1,15 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import {
   Building2, Plus, X, ExternalLink, ChevronDown, ChevronUp,
   Link2, Trash2, Search, Sparkles, BookOpen,
-  Save, FileText, Globe,
+  FileText, Globe,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { useDebouncedCallback } from "@/hooks/useDebouncedCallback";
+import { SaveStatus, type SaveState } from "@/components/SaveStatus";
 
 interface Company {
   _id: string; name: string; isCustom: boolean;
@@ -188,8 +190,12 @@ function CompanyCard({ company, onUpdate }: {
 }) {
   const [expanded, setExpanded] = useState(false);
   const [notes, setNotes] = useState(company.notes);
-  const [savingNotes, setSavingNotes] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<SaveState>("idle");
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  // Track whether this is the first autosave since page load — first save shows a toast.
+  const firstSaveRef = useRef(true);
+  // Track the "Saved ✓" clear timer so we don't have stale closures.
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleStatusChange = async (newStatus: Company["status"]) => {
     setUpdatingStatus(true);
@@ -204,17 +210,37 @@ function CompanyCard({ company, onUpdate }: {
     finally { setUpdatingStatus(false); }
   };
 
-  const handleSaveNotes = async () => {
-    setSavingNotes(true);
+  // Actual save function — called by the debounced wrapper.
+  const saveNotes = useCallback(async (value: string) => {
+    setSaveStatus("saving");
     try {
       await fetch(`/api/companies/${company._id}`, {
         method: "PATCH", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes }),
+        body: JSON.stringify({ notes: value }),
       });
-      onUpdate(company._id, { notes });
-      toast.success("Notes saved ✓");
-    } catch { toast.error("Failed to save notes"); }
-    finally { setSavingNotes(false); }
+      onUpdate(company._id, { notes: value });
+      // First save on page load shows a toast; subsequent ones are silent.
+      if (firstSaveRef.current) {
+        toast.success("Notes saved ✓");
+        firstSaveRef.current = false;
+      }
+      setSaveStatus("saved");
+      // Clear the "Saved ✓" indicator after 2 s.
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current);
+      savedTimerRef.current = setTimeout(() => setSaveStatus("idle"), 2000);
+    } catch {
+      setSaveStatus("error");
+      toast.error("Failed to save notes");
+    }
+  }, [company._id, onUpdate]);
+
+  // Debounced wrapper — fires saveNotes 800 ms after the user stops typing.
+  const debouncedSave = useDebouncedCallback(saveNotes, 800);
+
+  const handleNotesChange = (value: string) => {
+    setNotes(value);
+    setSaveStatus("saving"); // show "Saving..." immediately for instant feedback
+    debouncedSave(value);
   };
 
   const statuses: { key: Company["status"]; label: string; short: string }[] = [
@@ -308,7 +334,11 @@ function CompanyCard({ company, onUpdate }: {
                     </div>
                     <span className="text-xs font-bold text-[#94A3B8] uppercase tracking-widest">My Notes</span>
                   </div>
-                  <span className="text-[10px] text-[#334155] font-mono">{notes.length} chars</span>
+                  <div className="flex items-center gap-3">
+                    {/* Inline autosave status — replaces per-keystroke toast */}
+                    <SaveStatus state={saveStatus} />
+                    <span className="text-[10px] text-[#334155] font-mono">{notes.length} chars</span>
+                  </div>
                 </div>
 
                 {/* Notepad */}
@@ -323,7 +353,7 @@ function CompanyCard({ company, onUpdate }: {
                   </div>
                   <textarea
                     value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
+                    onChange={(e) => handleNotesChange(e.target.value)}
                     rows={4}
                     placeholder={`Jot down rounds, topics, tips for ${company.name}...\n\nExample:\n• Round 1: Aptitude (30 min)\n• Round 2: Technical - DSA\n• Key topics: Arrays, DP, OOP`}
                     className="w-full px-4 py-3 text-sm text-[#CBD5E1] placeholder:text-[#2d3a4d] focus:outline-none transition resize-none font-mono leading-relaxed"
@@ -331,36 +361,21 @@ function CompanyCard({ company, onUpdate }: {
                   />
                 </div>
 
-                {/* Save action */}
+                {/* Discard option — only shown when there are unsaved in-flight changes */}
                 <AnimatePresence>
-                  {notes !== company.notes && (
+                  {notes !== company.notes && saveStatus !== "saved" && (
                     <motion.div
                       initial={{ opacity: 0, y: -6 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -6 }}
-                      className="flex items-center justify-between mt-2.5 px-1"
+                      className="flex items-center justify-end mt-2 px-1"
                     >
-                      <span className="text-[11px] text-amber-400/80 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse inline-block" />
-                        Unsaved changes
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => setNotes(company.notes)}
-                          className="text-[11px] text-[#475569] hover:text-[#94A3B8] transition font-medium"
-                        >
-                          Discard
-                        </button>
-                        <button
-                          onClick={handleSaveNotes}
-                          disabled={savingNotes}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition disabled:opacity-50 shadow-md shadow-cyan-900/30"
-                          style={{ background: "linear-gradient(135deg, #0891b2, #7c3aed)" }}
-                        >
-                          <Save className="w-3 h-3" />
-                          {savingNotes ? "Saving..." : "Save Notes"}
-                        </button>
-                      </div>
+                      <button
+                        onClick={() => { setNotes(company.notes); setSaveStatus("idle"); }}
+                        className="text-[11px] text-[#475569] hover:text-[#94A3B8] transition font-medium"
+                      >
+                        Discard
+                      </button>
                     </motion.div>
                   )}
                 </AnimatePresence>

@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import authOptions from "@/lib/auth";
 import { v2 as cloudinary } from "cloudinary";
 
@@ -17,19 +18,28 @@ export async function POST() {
   if (!session?.user?.email)
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const timestamp = Math.round(Date.now() / 1000);
-  const folder = "placement-avatars";
+  try {
+    const timestamp = Math.round(Date.now() / 1000);
+    const folder = "placement-avatars";
 
-  const signature = cloudinary.utils.api_sign_request(
-    { timestamp, folder },
-    process.env.CLOUDINARY_API_SECRET!
-  );
+    const signature = cloudinary.utils.api_sign_request(
+      { timestamp, folder },
+      process.env.CLOUDINARY_API_SECRET!
+    );
 
-  return NextResponse.json({
-    signature,
-    timestamp,
-    folder,
-    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-    apiKey: process.env.CLOUDINARY_API_KEY,
-  });
+    return NextResponse.json({
+      signature,
+      timestamp,
+      folder,
+      cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+      apiKey: process.env.CLOUDINARY_API_KEY,
+    });
+  } catch (err) {
+    Sentry.captureException(err, {
+      tags: { layer: "cloudinary", operation: "sign-avatar" },
+      user: { email: session.user.email ?? undefined },
+    });
+    return NextResponse.json({ error: "Failed to generate avatar upload signature" }, { status: 500 });
+  }
 }
+

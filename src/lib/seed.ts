@@ -73,7 +73,6 @@ export async function seedTopics() {
   const count = await Topic.countDocuments();
   if (count === 0) {
     await Topic.insertMany(TOPICS);
-    console.log("✅ Topics seeded");
   }
   seeded = true;
 }

@@ -1,3 +1,5 @@
+import { withSentryConfig } from "@sentry/nextjs";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -14,4 +16,19 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // Suppress verbose Sentry build output — only errors will show.
+  silent: true,
+
+  // Disable source map upload in local dev (no auth token configured).
+  // In production CI, set SENTRY_AUTH_TOKEN to enable this.
+  disableServerWebpackPlugin: !process.env.SENTRY_AUTH_TOKEN,
+  disableClientWebpackPlugin: !process.env.SENTRY_AUTH_TOKEN,
+
+  // Automatically tree-shake Sentry logger statements in production.
+  hideSourceMaps: true,
+
+  // Avoid wrapping all API routes in a Sentry handler automatically
+  // (we wrap the critical ones manually for more control).
+  autoInstrumentServerFunctions: false,
+});

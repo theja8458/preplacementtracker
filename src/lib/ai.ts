@@ -10,6 +10,8 @@
  */
 
 import Groq from "groq-sdk";
+import * as Sentry from "@sentry/nextjs";
+
 
 // ---------------------------------------------------------------------------
 // Build one Groq client per configured key, skipping missing/empty entries
@@ -65,21 +67,33 @@ async function callGroqWithRotation(messages: Groq.Chat.ChatCompletionMessagePar
 
       if (isRateLimit) {
         const nextIndex = (keyIndex + 1) % clients.length;
-        console.log(
-          `Groq key ${keyIndex + 1} rate-limited, trying key ${nextIndex + 1}`
+        console.warn(
+          `[ai] Groq key ${keyIndex + 1} rate-limited — rotating to key ${nextIndex + 1}`
         );
         continue; // try next key
       }
 
-      // Non-rate-limit error — don't burn through all keys, propagate immediately
+      // Non-rate-limit error — don't burn through all keys, propagate immediately.
+      // Report to Sentry before re-throwing so it's captured even if the caller
+      // swallows the error or shows a generic user-facing message.
+      Sentry.withScope((scope) => {
+        scope.setContext("groq_key", { index: keyIndex + 1, totalKeys: clients.length });
+        scope.setTag("groq.error_type", "non_rate_limit");
+        Sentry.captureException(err);
+      });
       throw err;
     }
   }
 
   // All keys exhausted
   console.warn(
-    `All ${clients.length} Groq API keys are rate-limited. Throwing last error.`
+    `[ai] All ${clients.length} Groq API keys are rate-limited. Throwing last error.`
   );
+  Sentry.withScope((scope) => {
+    scope.setContext("groq_key", { totalKeys: clients.length, allExhausted: true });
+    scope.setTag("groq.error_type", "all_keys_rate_limited");
+    Sentry.captureException(lastError);
+  });
   throw lastError;
 }
 

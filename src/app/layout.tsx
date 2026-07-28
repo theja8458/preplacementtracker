@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SessionProvider from "@/components/SessionProvider";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { Toaster } from "sonner";
 import dynamic from "next/dynamic";
 
@@ -30,10 +31,12 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="bg-[#0D0F1A] text-white antialiased">
-        <SessionProvider>
-          {children}
-          <StudyBuddyWidget />
-        </SessionProvider>
+        <ErrorBoundary>
+          <SessionProvider>
+            {children}
+            <StudyBuddyWidget />
+          </SessionProvider>
+        </ErrorBoundary>
         <Toaster
           position="bottom-right"
           toastOptions={{
@@ -48,3 +51,4 @@ export default function RootLayout({
     </html>
   );
 }
+
